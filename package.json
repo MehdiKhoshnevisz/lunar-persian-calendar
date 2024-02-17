@@ -27,5 +27,9 @@
     "vite": "^5.1.0"
   },
   "keywords": ["calendar", "persian calendar", "react", "react calendar", "react persian calendar"],
-  "author": "Mehdi Khoshnevis"
+  "author": "Mehdi Khoshnevis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MehdiKhoshnevisz/lunar-persian-calendar.git"
+  }
 }
