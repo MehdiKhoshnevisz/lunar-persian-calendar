@@ -26,5 +26,6 @@
     "tailwindcss": "^3.4.1",
     "vite": "^5.1.0"
   },
-  "keywords": ["calendar", "persian calendar", "react", "react calendar", "react persian calendar"]
+  "keywords": ["calendar", "persian calendar", "react", "react calendar", "react persian calendar"],
+  "author": "Mehdi Khoshnevis"
 }
