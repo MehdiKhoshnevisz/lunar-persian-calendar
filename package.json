@@ -34,6 +34,7 @@
   "files": [
     "dist"
   ],
+  "types": "index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/lunar-persian-calendar.es.js",

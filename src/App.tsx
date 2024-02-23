@@ -1,6 +1,7 @@
-export interface IApp {
-  text?: string;
-}
-export const App = ({ text = "Lunar Persian Calendar" }: IApp) => {
+import { IApp } from "./index";
+
+export const App: React.FC<IApp> = ({
+  text = "Lunar Persian Calendar",
+}: IApp) => {
   return <div>{text}</div>;
 };
