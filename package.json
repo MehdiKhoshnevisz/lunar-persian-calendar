@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -13,7 +13,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.55",
+    "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
@@ -23,9 +23,16 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
     "vite": "^5.1.0"
   },
-  "keywords": ["calendar", "persian calendar", "react", "react calendar", "react persian calendar"],
+  "keywords": [
+    "calendar",
+    "persian calendar",
+    "react",
+    "react calendar",
+    "react persian calendar"
+  ],
   "author": "Mehdi Khoshnevis",
   "repository": {
     "type": "git",
