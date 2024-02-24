@@ -1,3 +1,6 @@
 export interface IApp {
-  text?: string;
+  withActions?: boolean;
+  onCancel?: () => viod | undefined;
+  onAccept?: () => viod | undefined;
+  onChange?: (props: number) => viod | undefined;
 }
