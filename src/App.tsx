@@ -1,36 +1,59 @@
 import dayjs from "dayjs";
+import jalaliday from "jalaliday";
 
 import { IApp } from "./index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const App: React.FC<IApp> = (props: IApp) => {
-  const { onChange, onAccept, onCancel, withActions = false } = props;
-  const [selectedDay, setSelectedDay] = useState(Number(dayjs().format("DD")));
-  const [currentMonth, setcurrentMonth] = useState(
-    Number(dayjs().format("M")) - 1
-  );
-  const [curentYear, setCurentYear] = useState(Number(dayjs().format("YYYY")));
+  dayjs.extend(jalaliday);
+  const jalaliDate = (date?: any) => dayjs(date).calendar("jalali");
 
-  const daysInCurrentMonth = dayjs().daysInMonth();
+  const { onChange, onAccept, onCancel, withActions = false } = props;
+  const [selectedDay, setSelectedDay] = useState(
+    Number(jalaliDate().format("DD"))
+  );
+  const [daysInMonth, setDaysInMonth]: any = useState([null]);
+  const [currentDate, setCurrentDate] = useState(jalaliDate());
+
+  useEffect(() => {
+    const daysLength = currentDate.daysInMonth();
+
+    const daysArray = Array.from(
+      { length: daysLength },
+      (_, index) => index + 1
+    );
+
+    setDaysInMonth(daysArray);
+  }, [currentDate]);
 
   const monthName = () => {
-    return dayjs().month(currentMonth).format("MMM");
+    return currentDate.locale("fa").format("MMMM");
+  };
+
+  const currentYear = () => {
+    return currentDate.locale("fa").year();
   };
 
   const clickOnPrevMonth = () => {
-    const count = currentMonth < 1 ? 12 : currentMonth;
-    if (currentMonth < 1) {
-      setCurentYear(curentYear - 1);
+    if (currentDate.month() === 0) {
+      // Fix: need to fix first time prev button
+      const prevYear = currentDate.month(11).subtract(1, "year");
+      setCurrentDate(prevYear);
+    } else {
+      const prevMonth = currentDate.subtract(1, "month");
+      console.log({ prevMonth: prevMonth.year() });
+      setCurrentDate(prevMonth);
     }
-    setcurrentMonth(count - 1);
   };
 
   const clickOnNextMonth = () => {
-    const count = currentMonth > 10 ? -1 : currentMonth;
-    if (currentMonth >= 11) {
-      setCurentYear(curentYear + 1);
+    if (currentDate.month() === 11) {
+      const nextYear = currentDate.month(0).add(1, "year");
+      setCurrentDate(nextYear);
+    } else {
+      const nextMonth = currentDate.add(1, "month");
+      setCurrentDate(nextMonth);
     }
-    setcurrentMonth(count + 1);
   };
 
   const handleClickOnDay = (day: number) => {
@@ -40,31 +63,11 @@ export const App: React.FC<IApp> = (props: IApp) => {
     setSelectedDay(day);
   };
 
-  const days = Array.from(
-    { length: daysInCurrentMonth },
-    (_, index) => index + 1
-  );
-
-  // const months = [
-  //   "January",
-  //   "February",
-  //   "March",
-  //   "April",
-  //   "May",
-  //   "June",
-  //   "July",
-  //   "August",
-  //   "September",
-  //   "October",
-  //   "November",
-  //   "December",
-  // ];
-
   return (
     <div
-      className="bg-white rounded-md p-8 font-mono"
+      className="bg-white rounded-lg p-8"
       style={{
-        width: "437px",
+        minHeight: "368px",
         boxShadow: "0px 8px 24px 0px rgba(84, 89, 115, 0.06)",
       }}
     >
@@ -72,17 +75,17 @@ export const App: React.FC<IApp> = (props: IApp) => {
         <img
           src="/arrow-left.svg"
           alt=""
-          className="cursor-pointer"
+          className="cursor-pointer  transition-all active:scale-90"
           onClick={clickOnPrevMonth}
         />
         <div>
           <span>{monthName()}&nbsp;</span>
-          <span>{curentYear}</span>
+          <span>{currentYear()}</span>
         </div>
         <img
           src="/arrow-right.svg"
           alt=""
-          className="cursor-pointer"
+          className="cursor-pointer transition-all active:scale-90"
           onClick={clickOnNextMonth}
         />
       </header>
@@ -98,7 +101,7 @@ export const App: React.FC<IApp> = (props: IApp) => {
           <span className="block text-center w-8 h-8">S</span>
         </div>
         <div className="grid grid-cols-7 gap-4 text-sm">
-          {days.map((item) => (
+          {daysInMonth.map((item: any) => (
             <span
               key={item}
               className={`flex items-center justify-center text-center  cursor-pointer w-8 h-8 rounded-full transition-all ${
