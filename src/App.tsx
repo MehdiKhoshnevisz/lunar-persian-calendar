@@ -10,7 +10,7 @@ import { DaysHeader } from "./components/DaysHeader";
 export const App: React.FC<IApp> = (props: IApp) => {
   const { onChange, onAccept, onCancel, withActions = false } = props;
 
-  const jalaliDate = useDate({});
+  const jalaliDate = useDate();
   const [currentDate, setCurrentDate] = useState(jalaliDate());
 
   return (
@@ -27,7 +27,10 @@ export const App: React.FC<IApp> = (props: IApp) => {
         onPrev={(date: any) => setCurrentDate(date)}
       />
       <DaysHeader />
-      <Days currentDate={currentDate} />
+      <Days
+        currentDate={currentDate}
+        onChange={(date: any) => setCurrentDate(date)}
+      />
       {withActions && <Actions />}
     </div>
   );

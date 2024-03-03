@@ -1,12 +1,9 @@
-import dayjs from "dayjs";
 import jalaliday from "jalaliday";
+import dayjs, { Dayjs } from "dayjs";
 
-interface Props {
-  date?: Date;
-}
+type DateType = Dayjs;
 
-export const useDate = (props: Props) => {
-  const { date } = props;
+export const useDate = () => {
   dayjs.extend(jalaliday);
-  return () => dayjs(date).calendar("jalali");
+  return (date?: DateType) => dayjs(date).calendar("jalali");
 };
