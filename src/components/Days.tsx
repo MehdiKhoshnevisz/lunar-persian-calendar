@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useDate } from "../hooks/useDate";
 
 export const Days = (props: any) => {
-  const { currentDate } = props;
+  const { currentDate, showDefaultDay = true } = props;
 
   const jalaliDate = useDate({});
   const [selectedDay, setSelectedDay] = useState(
@@ -24,17 +24,30 @@ export const Days = (props: any) => {
     setDaysInMonth(daysArray);
   }, [currentDate]);
 
+  const defaultDay = useMemo(
+    () => Number(jalaliDate().format("DD")),
+    [currentDate]
+  );
+
+  const dayClasses =
+    "flex items-center justify-center text-center  cursor-pointer w-8 h-8 rounded-full transition-all";
+
+  const activeClasses = (day: any) => {
+    if (day === selectedDay) return "bg-black text-white";
+    if (showDefaultDay && day === defaultDay)
+      return "bg-slate-100 text-primary";
+    // TODO: active holiday days
+    // if (day === 29) return "bg-red-500 text-white";
+    return "hover:bg-slate-100";
+  };
+
   return (
     <div style={{ direction: "rtl" }}>
       <div className="grid grid-cols-7 gap-4 text-sm">
         {daysInMonth.map((item: any) => (
           <span
             key={item}
-            className={`flex items-center justify-center text-center  cursor-pointer w-8 h-8 rounded-full transition-all ${
-              item === selectedDay
-                ? "bg-black text-white"
-                : "hover:bg-slate-100"
-            }`}
+            className={`${dayClasses} ${activeClasses(item)}`}
             onClick={() => handleClickOnDay(item)}
           >
             {item}
