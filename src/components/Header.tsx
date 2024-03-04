@@ -1,5 +1,5 @@
 export const Header = (props: any) => {
-  const { currentDate, onNext, onPrev } = props;
+  const { currentDate, onNext = () => {}, onPrev = () => {} } = props;
 
   const monthName = () => {
     return currentDate.locale("fa").format("MMMM");

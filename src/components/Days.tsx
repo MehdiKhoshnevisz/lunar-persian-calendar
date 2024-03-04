@@ -4,21 +4,15 @@ import { useDate } from "../hooks/useDate";
 
 export const Days = (props: any) => {
   const { onChange, currentDate, showDefaultDay = true } = props;
-
   const jalaliDate = useDate();
-  const [selectedDay, setSelectedDay] = useState(
-    Number(jalaliDate().format("DD"))
-  );
   const [daysInMonth, setDaysInMonth]: any = useState([null]);
-
-  const defaultDay = useMemo(
-    () => Number(jalaliDate(currentDate).format("DD")),
-    []
-  );
+  const defaultDay = useMemo(() => Number(jalaliDate().format("DD")), []);
+  const defaultMonth = useMemo(() => Number(jalaliDate().format("MM")), []);
+  const selectedMonth = Number(jalaliDate(currentDate).format("MM"));
+  const selectedDay = Number(jalaliDate(currentDate).format("DD"));
 
   const handleClickOnDay = (day: number) => {
     onChange(jalaliDate(currentDate).day(day));
-    setSelectedDay(day);
   };
 
   const dayClasses =
@@ -26,7 +20,7 @@ export const Days = (props: any) => {
 
   const activeClasses = (day: any) => {
     if (day === selectedDay) return "bg-black text-white";
-    if (showDefaultDay && day === defaultDay)
+    if (showDefaultDay && day === defaultDay && defaultMonth === selectedMonth)
       return "bg-slate-100 text-primary";
     // TODO: active holiday days
     // if (day === 29) return "bg-red-500 text-white";

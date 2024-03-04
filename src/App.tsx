@@ -26,11 +26,14 @@ export const App: React.FC<IApp> = (props: IApp) => {
         onNext={(date: any) => setCurrentDate(date)}
         onPrev={(date: any) => setCurrentDate(date)}
       />
+
       <DaysHeader />
+
       <Days
         currentDate={currentDate}
         onChange={(date: any) => setCurrentDate(date)}
       />
+
       {withActions && <Actions />}
     </div>
   );
