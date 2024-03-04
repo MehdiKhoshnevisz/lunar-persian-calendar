@@ -1,8 +1,19 @@
-export const Header = (props: any) => {
-  const { currentDate, onNext = () => {}, onPrev = () => {} } = props;
+import { useDate } from "../hooks/useDate";
+import { useDateContext } from "../store/DateContext";
+
+export const Header = () => {
+  const jalaliDate = useDate();
+
+  const { currentDate, setCurrentDate } = useDateContext();
+  const { currentMonthFormHeader, setCurrentMonthFromHeader } =
+    useDateContext();
+
+  const months = Array.from({ length: 12 }, (_, index) =>
+    jalaliDate().locale("fa").month(index).format("MMMM")
+  );
 
   const monthName = () => {
-    return currentDate.locale("fa").format("MMMM");
+    return months[currentMonthFormHeader];
   };
 
   const currentYear = () => {
@@ -10,23 +21,21 @@ export const Header = (props: any) => {
   };
 
   const clickOnPrevMonth = () => {
-    if (currentDate.month() === 0) {
-      // Fix: need to fix first time prev button
-      const prevYear = currentDate.month(11).subtract(1, "year");
-      onPrev(prevYear);
+    if (currentMonthFormHeader === 0) {
+      setCurrentMonthFromHeader(11);
+      setCurrentDate(currentDate.subtract(1, "year"));
     } else {
-      const prevMonth = currentDate.subtract(1, "month");
-      onPrev(prevMonth);
+      const prevMonth = currentMonthFormHeader - 1;
+      setCurrentMonthFromHeader(prevMonth);
     }
   };
 
   const clickOnNextMonth = () => {
-    if (currentDate.month() === 11) {
-      const nextYear = currentDate.month(0).add(1, "year");
-      onNext(nextYear);
+    if (currentMonthFormHeader === 11) {
+      setCurrentMonthFromHeader(0);
+      setCurrentDate(currentDate.add(1, "year"));
     } else {
-      const nextMonth = currentDate.add(1, "month");
-      onNext(nextMonth);
+      setCurrentMonthFromHeader(currentMonthFormHeader + 1);
     }
   };
 
@@ -39,7 +48,9 @@ export const Header = (props: any) => {
         onClick={clickOnPrevMonth}
       />
       <div>
-        <span>{monthName()}&nbsp;</span>
+        <span className="cursor-pointer hover:text-slate-500">
+          {monthName()}&nbsp;
+        </span>
         <span>{currentYear()}</span>
       </div>
       <img

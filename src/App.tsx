@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
 import { IApp } from "./index";
 import { useDate } from "./hooks/useDate";
@@ -6,12 +6,21 @@ import { Days } from "./components/Days";
 import { Header } from "./components/Header";
 import { Actions } from "./components/Actions";
 import { DaysHeader } from "./components/DaysHeader";
+import { useDateContext } from "./store/DateContext";
 
 export const App: React.FC<IApp> = (props: IApp) => {
-  const { onChange, onAccept, onCancel, withActions = false } = props;
+  const {
+    onChange = () => {},
+    onAccept,
+    onCancel,
+    withActions = false,
+  } = props;
 
-  const jalaliDate = useDate();
-  const [currentDate, setCurrentDate] = useState(jalaliDate());
+  const { currentDate, setCurrentDate } = useDateContext();
+
+  useEffect(() => {
+    onChange(currentDate.toDate());
+  }, [currentDate]);
 
   return (
     <div
@@ -21,19 +30,9 @@ export const App: React.FC<IApp> = (props: IApp) => {
         boxShadow: "0px 8px 24px 0px rgba(84, 89, 115, 0.06)",
       }}
     >
-      <Header
-        currentDate={currentDate}
-        onNext={(date: any) => setCurrentDate(date)}
-        onPrev={(date: any) => setCurrentDate(date)}
-      />
-
+      <Header />
       <DaysHeader />
-
-      <Days
-        currentDate={currentDate}
-        onChange={(date: any) => setCurrentDate(date)}
-      />
-
+      <Days />
       {withActions && <Actions />}
     </div>
   );

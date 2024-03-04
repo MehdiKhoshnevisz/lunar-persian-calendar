@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App";
 
 import "./global.css";
+import { DateProvider } from "./store/DateContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -12,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <span className="block text-center mb-16 text-3xl">
           LUNAR Persian Calendar
         </span>
-        <App />
+        <DateProvider>
+          <App />
+        </DateProvider>
       </div>
     </main>
   </React.StrictMode>
