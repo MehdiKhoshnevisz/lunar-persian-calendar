@@ -9,18 +9,24 @@ export const Days = (props: any) => {
   const { currentDate, setCurrentDate } = useDateContext();
   const { currentMonthFormHeader, setCurrentMonthFromHeader } =
     useDateContext();
+  const { currentYearFormHeader, setCurrentYearFromHeader } = useDateContext();
   const [daysInMonth, setDaysInMonth]: any = useState([null]);
   const [selectedDay, setSelectedDay]: any = useState(
     Number(jalaliDate(currentDate).format("DD"))
   );
   const defaultDay = useMemo(() => Number(jalaliDate().format("DD")), []);
   const defaultMonth = useMemo(() => Number(jalaliDate().format("MM")) - 1, []);
+  const defaultYear = useMemo(() => Number(jalaliDate().format("YYYY")), []);
   const selectedMonth = Number(jalaliDate(currentDate).format("MM")) - 1;
+  const selectedYear = Number(currentDate.format("YYYY"));
 
   const handleClickOnDay = (day: number) => {
     setSelectedDay(day);
     setCurrentDate(
-      jalaliDate(currentDate).day(day).month(currentMonthFormHeader)
+      jalaliDate(currentDate)
+        .day(day)
+        .month(currentMonthFormHeader)
+        .year(currentYearFormHeader)
     );
   };
 
@@ -28,12 +34,17 @@ export const Days = (props: any) => {
     "flex items-center justify-center text-center  cursor-pointer w-8 h-8 rounded-full transition-all";
 
   const activeClasses = (day: any) => {
-    if (day === selectedDay && currentMonthFormHeader === selectedMonth)
+    if (
+      day === selectedDay &&
+      currentMonthFormHeader === selectedMonth &&
+      currentYearFormHeader === selectedYear
+    )
       return "bg-black text-white";
     if (
       showDefaultDay &&
       day === defaultDay &&
-      defaultMonth === currentMonthFormHeader
+      defaultMonth === currentMonthFormHeader &&
+      defaultYear === currentYearFormHeader
     )
       return "bg-slate-100 text-primary";
     // TODO: active holiday days

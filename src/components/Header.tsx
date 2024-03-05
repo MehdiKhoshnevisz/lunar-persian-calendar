@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDate } from "../hooks/useDate";
 import { useDateContext } from "../store/DateContext";
 
@@ -8,8 +8,8 @@ export const Header = () => {
   const { currentDate, setCurrentDate } = useDateContext();
   const { currentMonthFormHeader, setCurrentMonthFromHeader } =
     useDateContext();
+  const { currentYearFormHeader, setCurrentYearFromHeader } = useDateContext();
   const { showMonthList, setShowMonthList } = useDateContext();
-  const [monthList, setOpenMonthList] = useState(false);
 
   const months = Array.from({ length: 12 }, (_, index) =>
     jalaliDate().locale("fa").month(index).format("MMMM")
@@ -19,14 +19,10 @@ export const Header = () => {
     return months[currentMonthFormHeader];
   };
 
-  const currentYear = () => {
-    return currentDate.locale("fa").year();
-  };
-
   const clickOnPrevMonth = () => {
     if (currentMonthFormHeader === 0) {
       setCurrentMonthFromHeader(11);
-      setCurrentDate(currentDate.subtract(1, "year"));
+      setCurrentYearFromHeader(currentYearFormHeader - 1);
     } else {
       const prevMonth = currentMonthFormHeader - 1;
       setCurrentMonthFromHeader(prevMonth);
@@ -36,7 +32,7 @@ export const Header = () => {
   const clickOnNextMonth = () => {
     if (currentMonthFormHeader === 11) {
       setCurrentMonthFromHeader(0);
-      setCurrentDate(currentDate.add(1, "year"));
+      setCurrentYearFromHeader(currentYearFormHeader + 1);
     } else {
       setCurrentMonthFromHeader(currentMonthFormHeader + 1);
     }
@@ -65,7 +61,7 @@ export const Header = () => {
         >
           {monthName()}&nbsp;
         </span>
-        <span>{currentYear()}</span>
+        <span>{currentYearFormHeader}</span>
       </div>
       <img
         src="/arrow-right.svg"
