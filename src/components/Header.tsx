@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useDate } from "../hooks/useDate";
 import { useDateContext } from "../store/DateContext";
 
@@ -7,6 +8,8 @@ export const Header = () => {
   const { currentDate, setCurrentDate } = useDateContext();
   const { currentMonthFormHeader, setCurrentMonthFromHeader } =
     useDateContext();
+  const { showMonthList, setShowMonthList } = useDateContext();
+  const [monthList, setOpenMonthList] = useState(false);
 
   const months = Array.from({ length: 12 }, (_, index) =>
     jalaliDate().locale("fa").month(index).format("MMMM")
@@ -39,6 +42,14 @@ export const Header = () => {
     }
   };
 
+  const clickOnCurrentMonth = () => {
+    setShowMonthList(!showMonthList);
+  };
+
+  useEffect(() => {
+    setCurrentMonthFromHeader(currentDate.month());
+  }, [currentDate.month()]);
+
   return (
     <header className="flex justify-between items-center mb-6">
       <img
@@ -48,7 +59,10 @@ export const Header = () => {
         onClick={clickOnPrevMonth}
       />
       <div>
-        <span className="cursor-pointer hover:text-slate-500">
+        <span
+          className="cursor-pointer hover:text-slate-500"
+          onClick={clickOnCurrentMonth}
+        >
           {monthName()}&nbsp;
         </span>
         <span>{currentYear()}</span>
