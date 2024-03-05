@@ -1,13 +1,10 @@
-import { useState } from "react";
-import { useDate } from "../hooks/useDate";
 import { useDateContext } from "../store/DateContext";
 
 export const Months = () => {
-  const jalaliDate = useDate();
   const { currentDate, setCurrentDate } = useDateContext();
   const { showMonthList, setShowMonthList } = useDateContext();
   const months = Array.from({ length: 12 }, (_, index) =>
-    jalaliDate().locale("fa").month(index).format("MMMM")
+    currentDate.locale("fa").month(index).format("MMMM")
   );
 
   const onMonthClick = (month: number) => {

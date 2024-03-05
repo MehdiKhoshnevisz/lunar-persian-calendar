@@ -1,10 +1,7 @@
 import { useEffect } from "react";
-import { useDate } from "../hooks/useDate";
 import { useDateContext } from "../store/DateContext";
 
 export const Header = () => {
-  const jalaliDate = useDate();
-
   const { currentDate, setCurrentDate } = useDateContext();
   const { currentMonthFormHeader, setCurrentMonthFromHeader } =
     useDateContext();
@@ -12,7 +9,7 @@ export const Header = () => {
   const { showMonthList, setShowMonthList } = useDateContext();
 
   const months = Array.from({ length: 12 }, (_, index) =>
-    jalaliDate().locale("fa").month(index).format("MMMM")
+    currentDate.locale("fa").month(index).format("MMMM")
   );
 
   const monthName = () => {
