@@ -4,10 +4,12 @@ import { createContext, useState, useContext } from "react";
 
 interface DateContextType {
   currentDate: Dayjs;
+  showYearList: boolean;
   showMonthList: boolean;
   currentYearFormHeader: number;
   currentMonthFormHeader: number;
   setCurrentDate: (date: Dayjs) => void;
+  setShowYearList: (value: boolean) => void;
   setShowMonthList: (value: boolean) => void;
   setCurrentYearFromHeader: (month: number) => void;
   setCurrentMonthFromHeader: (month: number) => void;
@@ -37,13 +39,16 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     jalaliDate().year()
   );
   const [showMonthList, setShowMonthList] = useState(false);
+  const [showYearList, setShowYearList] = useState(false);
 
   return (
     <DateContext.Provider
       value={{
         currentDate,
+        showYearList,
         showMonthList,
         setCurrentDate,
+        setShowYearList,
         setShowMonthList,
         currentYearFormHeader,
         currentMonthFormHeader,

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { IApp } from "./index";
 import { Days } from "./components/Days";
+import { Years } from "./components/Years";
 import { Months } from "./components/Months";
 import { Header } from "./components/Header";
 import { Actions } from "./components/Actions";
@@ -17,7 +18,19 @@ export const App: React.FC<IApp> = (props: IApp) => {
   } = props;
 
   const { currentDate, setCurrentDate } = useDateContext();
+  const { showYearList, setShowYearList } = useDateContext();
   const { showMonthList, setShowMonthList } = useDateContext();
+
+  const MonthsOrYearsOrDaysComponent = () => {
+    if (showMonthList) return <Months />;
+    else if (showYearList) return <Years />;
+    return (
+      <>
+        <DaysHeader />
+        <Days />
+      </>
+    );
+  };
 
   useEffect(() => {
     onChange(currentDate.toDate());
@@ -33,15 +46,7 @@ export const App: React.FC<IApp> = (props: IApp) => {
       }}
     >
       <Header />
-
-      {showMonthList ? (
-        <Months />
-      ) : (
-        <>
-          <DaysHeader />
-          <Days />
-        </>
-      )}
+      <MonthsOrYearsOrDaysComponent />
       {withActions && <Actions />}
     </div>
   );

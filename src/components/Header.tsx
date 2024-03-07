@@ -7,6 +7,7 @@ export const Header = () => {
     useDateContext();
   const { currentYearFormHeader, setCurrentYearFromHeader } = useDateContext();
   const { showMonthList, setShowMonthList } = useDateContext();
+  const { showYearList, setShowYearList } = useDateContext();
 
   const months = Array.from({ length: 12 }, (_, index) =>
     currentDate.locale("fa").month(index).format("MMMM")
@@ -37,6 +38,12 @@ export const Header = () => {
 
   const clickOnCurrentMonth = () => {
     setShowMonthList(!showMonthList);
+    setShowYearList(false);
+  };
+
+  const clickOnCurrentYear = () => {
+    setShowYearList(!showYearList);
+    setShowMonthList(false);
   };
 
   useEffect(() => {
@@ -52,13 +59,12 @@ export const Header = () => {
         onClick={clickOnPrevMonth}
       />
       <div>
-        <span
-          className="cursor-pointer hover:text-slate-500"
-          onClick={clickOnCurrentMonth}
-        >
+        <span className="cursor-pointer" onClick={clickOnCurrentMonth}>
           {monthName()}&nbsp;
         </span>
-        <span>{currentYearFormHeader}</span>
+        <span className="cursor-pointer" onClick={clickOnCurrentYear}>
+          {currentYearFormHeader}
+        </span>
       </div>
       <img
         src="/arrow-right.svg"
