@@ -41,7 +41,7 @@ export const App: React.FC<IApp> = (props: IApp) => {
       className="bg-white rounded-lg p-8"
       style={{
         minWidth: "384px",
-        height: "368px",
+        minHeight: "368px",
         boxShadow: "0px 8px 24px 0px rgba(84, 89, 115, 0.06)",
       }}
     >
