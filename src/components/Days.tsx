@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useDate } from "../hooks/useDate";
 import { useDateContext } from "src/store/DateContext";
 
+import { WEEKDAY_NAMES } from "./DaysHeader";
+
 export const Days = (props: any) => {
   const { showDefaultDay = true } = props;
   const jalaliDate = useDate();
@@ -20,7 +22,12 @@ export const Days = (props: any) => {
   const selectedMonth = Number(jalaliDate(currentDate).format("MM")) - 1;
   const selectedYear = Number(currentDate.format("YYYY"));
 
-  const handleClickOnDay = (day: number) => {
+  const handleClickOnDay = (dayObject: any) => {
+    const day = dayObject?.day;
+    const isCurrentMonth = dayObject?.isCurrentMonth;
+
+    if (!isCurrentMonth) return;
+
     setSelectedDay(day);
     setCurrentDate(
       jalaliDate(currentDate)
@@ -31,46 +38,129 @@ export const Days = (props: any) => {
   };
 
   const dayClasses =
-    "flex items-center justify-center text-center  cursor-pointer w-8 h-8 rounded-full transition-all";
+    "flex items-center justify-center text-center w-8 h-8 rounded-full transition-all";
 
-  const activeClasses = (day: any) => {
+  const activeClasses = (dayObject: any) => {
+    const day = dayObject?.day;
+    const isCurrentMonth = dayObject?.isCurrentMonth;
+
     if (
+      isCurrentMonth &&
       day === selectedDay &&
       currentMonthFormHeader === selectedMonth &&
       currentYearFormHeader === selectedYear
     )
       return "bg-black text-white";
     if (
+      isCurrentMonth &&
       showDefaultDay &&
       day === defaultDay &&
       defaultMonth === currentMonthFormHeader &&
       defaultYear === currentYearFormHeader
     )
       return "bg-slate-100 text-primary";
+
+    if (!isCurrentMonth) {
+      return "text-gray-300";
+    }
     // TODO: active holiday days
     // if (day === 29) return "bg-red-500 text-white";
-    return "hover:bg-slate-100";
+    return "cursor-pointer hover:bg-slate-100";
   };
 
-  useEffect(() => {
-    const daysLength = jalaliDate().month(currentMonthFormHeader).daysInMonth();
-    const daysArray = Array.from(
-      { length: daysLength },
-      (_, index) => index + 1
+  const getUpdatedCurrentDate = (date: any) => {
+    const targetDate = date
+      .day(defaultDay)
+      .month(currentMonthFormHeader)
+      .year(currentYearFormHeader);
+    return targetDate;
+  };
+
+  function getFirstWeekdayOfMonth(date: any) {
+    const targetDate = getUpdatedCurrentDate(date);
+
+    const targetDateWeekdayname = targetDate
+      .locale("fa")
+      .startOf("month")
+      .format("dd");
+
+    const targetWeekday = WEEKDAY_NAMES.find(
+      (item) => item.name === targetDateWeekdayname
     );
-    setDaysInMonth(daysArray);
+
+    return targetWeekday;
+  }
+
+  function getLastWeekdayOfMonth(date: any) {
+    const targetDate = getUpdatedCurrentDate(date);
+
+    const targetDateWeekdayname = targetDate
+      .locale("fa")
+      .endOf("month")
+      .format("dd");
+
+    const targetWeekday = WEEKDAY_NAMES.find(
+      (item) => item.name === targetDateWeekdayname
+    );
+
+    return targetWeekday;
+  }
+
+  useEffect(() => {
+    const firstWeekdayOfMonth = Number(
+      getFirstWeekdayOfMonth(currentDate)?.key
+    );
+
+    const startOfCurrentMonth = Number(
+      currentDate.month(currentMonthFormHeader).startOf("month").format("d")
+    );
+
+    const prevMonthDaysLength = currentDate
+      .month(currentMonthFormHeader - 1)
+      .daysInMonth();
+
+    const nextMonthDaysLength =
+      6 - Number(getLastWeekdayOfMonth(currentDate)?.key);
+
+    const currentMonthDaysLength = jalaliDate()
+      .month(currentMonthFormHeader)
+      .daysInMonth();
+
+    const prevMonthDays = Array.from(
+      { length: firstWeekdayOfMonth },
+      (_, index) => ({
+        day: prevMonthDaysLength - startOfCurrentMonth + index,
+        isCurrentMonth: false,
+      })
+    );
+
+    const currentMonthDays = Array.from(
+      { length: currentMonthDaysLength },
+      (_, index) => ({ day: index + 1, isCurrentMonth: true })
+    );
+
+    const nextMonthDays = Array.from(
+      { length: nextMonthDaysLength },
+      (_, index) => ({ day: index + 1, isCurrentMonth: false })
+    );
+
+    const days = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
+
+    console.log({ days });
+
+    setDaysInMonth(days);
   }, [currentMonthFormHeader]);
 
   return (
     <div style={{ direction: "rtl" }}>
       <div className="grid grid-cols-7 gap-4 text-sm">
-        {daysInMonth.map((item: any) => (
+        {daysInMonth.map((item: any, index: number) => (
           <span
-            key={item}
+            key={index}
             className={`${dayClasses} ${activeClasses(item)}`}
             onClick={() => handleClickOnDay(item)}
           >
-            {item}
+            {item?.day}
           </span>
         ))}
       </div>
