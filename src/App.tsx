@@ -42,6 +42,7 @@ export const App: React.FC<IApp> = (props: IApp) => {
       style={{
         minWidth: "384px",
         minHeight: "368px",
+        maxHeight: "410px",
         boxShadow: "0px 8px 24px 0px rgba(84, 89, 115, 0.06)",
       }}
     >

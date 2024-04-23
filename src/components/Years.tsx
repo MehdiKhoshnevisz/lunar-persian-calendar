@@ -19,7 +19,7 @@ export const Years = () => {
   return (
     <div
       className="grid grid-cols-3 gap-x-14 gap-y-11 text-center py-4 overflow-y-auto"
-      style={{ direction: "rtl", height: `calc(100% - 60px)` }}
+      style={{ direction: "rtl", height: "320px", overflow: "auto" }}
     >
       {years.map((item, index) => (
         <span

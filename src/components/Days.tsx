@@ -146,8 +146,6 @@ export const Days = (props: any) => {
 
     const days = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
 
-    console.log({ days });
-
     setDaysInMonth(days);
   }, [currentMonthFormHeader]);
 
