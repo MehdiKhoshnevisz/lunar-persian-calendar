@@ -1,54 +1,22 @@
-import { useEffect } from "react";
+import { useYears } from "../hooks/useYears";
+import { useMonth } from "../hooks/useMonth";
 import { useDateContext } from "../store/DateContext";
 
 export const Header = () => {
-  const { currentDate, setCurrentDate } = useDateContext();
-  const { currentMonthFormHeader, setCurrentMonthFromHeader } =
+  const { currentYear } = useYears();
+  const { currentMonthName, goToNextMonth, goToPrevMonth } = useMonth();
+  const { showYearList, showMonthList, setShowYearList, setShowMonthList } =
     useDateContext();
-  const { currentYearFormHeader, setCurrentYearFromHeader } = useDateContext();
-  const { showMonthList, setShowMonthList } = useDateContext();
-  const { showYearList, setShowYearList } = useDateContext();
 
-  const months = Array.from({ length: 12 }, (_, index) =>
-    currentDate.locale("fa").month(index).format("MMMM")
-  );
-
-  const monthName = () => {
-    return months[currentMonthFormHeader];
-  };
-
-  const clickOnPrevMonth = () => {
-    if (currentMonthFormHeader === 0) {
-      setCurrentMonthFromHeader(11);
-      setCurrentYearFromHeader(currentYearFormHeader - 1);
-    } else {
-      const prevMonth = currentMonthFormHeader - 1;
-      setCurrentMonthFromHeader(prevMonth);
-    }
-  };
-
-  const clickOnNextMonth = () => {
-    if (currentMonthFormHeader === 11) {
-      setCurrentMonthFromHeader(0);
-      setCurrentYearFromHeader(currentYearFormHeader + 1);
-    } else {
-      setCurrentMonthFromHeader(currentMonthFormHeader + 1);
-    }
-  };
-
-  const clickOnCurrentMonth = () => {
+  const clickOnMonth = () => {
     setShowMonthList(!showMonthList);
     setShowYearList(false);
   };
 
-  const clickOnCurrentYear = () => {
+  const clickOnYear = () => {
     setShowYearList(!showYearList);
     setShowMonthList(false);
   };
-
-  useEffect(() => {
-    setCurrentMonthFromHeader(currentDate.month());
-  }, [currentDate.month()]);
 
   return (
     <header className="flex justify-between items-center mb-6">
@@ -56,21 +24,24 @@ export const Header = () => {
         src="/arrow-left.svg"
         alt=""
         className="cursor-pointer  transition-all active:scale-90"
-        onClick={clickOnPrevMonth}
+        onClick={goToPrevMonth}
       />
+
       <div>
-        <span className="cursor-pointer" onClick={clickOnCurrentMonth}>
-          {monthName()}&nbsp;
+        <span className="cursor-pointer" onClick={clickOnMonth}>
+          {currentMonthName}
         </span>
-        <span className="cursor-pointer" onClick={clickOnCurrentYear}>
-          {currentYearFormHeader}
+        &nbsp;
+        <span className="cursor-pointer" onClick={clickOnYear}>
+          {currentYear}
         </span>
       </div>
+
       <img
         src="/arrow-right.svg"
         alt=""
         className="cursor-pointer transition-all active:scale-90"
-        onClick={clickOnNextMonth}
+        onClick={goToNextMonth}
       />
     </header>
   );

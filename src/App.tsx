@@ -6,7 +6,7 @@ import { Years } from "./components/Years";
 import { Months } from "./components/Months";
 import { Header } from "./components/Header";
 import { Actions } from "./components/Actions";
-import { DaysHeader } from "./components/DaysHeader";
+import { Weekdays } from "./components/Weekdays";
 import { useDateContext } from "./store/DateContext";
 
 export const App: React.FC<IApp> = (props: IApp) => {
@@ -26,7 +26,7 @@ export const App: React.FC<IApp> = (props: IApp) => {
     else if (showYearList) return <Years />;
     return (
       <>
-        <DaysHeader />
+        <Weekdays />
         <Days />
       </>
     );
