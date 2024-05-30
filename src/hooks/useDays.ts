@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useCallback } from "react";
 
 import { useDate } from "../hooks/useDate";
 import { useDateContext } from "../store/DateContext";
@@ -9,23 +9,67 @@ export const useDays = ({ showDefaultDay = true }) => {
     useDateContext();
   const { currentMonthFormHeader } = useDateContext();
   const { currentYearFormHeader } = useDateContext();
-  const [daysInMonth, setDaysInMonth]: any = useState([null]);
-  const defaultDay = useMemo(
-    () => Number(baseDate().calendar(calendarType).date()),
-    []
-  );
-  const defaultMonth = useMemo(
-    () => Number(baseDate().calendar(calendarType).month()),
-    []
-  );
-  const defaultYear = useMemo(
-    () => Number(baseDate().calendar(calendarType).year()),
-    []
-  );
-  const selectedMonth = Number(currentDate.format("MM")) - 1;
-  const selectedYear = Number(currentDate.format("YYYY"));
 
-  const handleClickOnDay = (dayObject: any) => {
+  const currentMonthDaysLength = currentDate
+    .month(currentMonthFormHeader)
+    .daysInMonth();
+
+  const prevMonthDaysLength = currentDate
+    .month(currentMonthFormHeader - 1)
+    .daysInMonth();
+
+  const startOfCurrentMonth = Number(
+    currentDate.month(currentMonthFormHeader).startOf("month").weekday()
+  );
+
+  const endOfCurrentMonth = Number(
+    currentDate.month(currentMonthFormHeader).endOf("month").weekday()
+  );
+
+  const nextMonthDaysLength = 6 - Number(endOfCurrentMonth);
+
+  const prevMonthDays = Array.from(
+    { length: startOfCurrentMonth },
+    (_, index) => ({
+      day: prevMonthDaysLength - (startOfCurrentMonth - 1) + index,
+      isCurrentMonth: false,
+    })
+  );
+
+  const currentMonthDays = Array.from(
+    { length: currentMonthDaysLength },
+    (_, index) => ({
+      day: index + 1,
+      isCurrentMonth: true,
+    })
+  );
+
+  const nextMonthDays = Array.from(
+    { length: nextMonthDaysLength },
+    (_, index) => ({
+      day: index + 1,
+      isCurrentMonth: false,
+    })
+  );
+
+  const allDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
+
+  const checkIsHoliday = (dayNumber: number) => {
+    const targetDateWeekdayname = dayNumber % 7;
+    const holidayWeekdays = locale === "fa" ? [6] : [0, 6];
+    return holidayWeekdays.includes(targetDateWeekdayname);
+  };
+
+  const days = useMemo(
+    () =>
+      allDays.map((item, index) => ({
+        ...item,
+        isHoliday: checkIsHoliday(index),
+      })),
+    [allDays]
+  );
+
+  const clickOnDay = useCallback((dayObject: any) => {
     const day = dayObject?.day;
     const isCurrentMonth = dayObject?.isCurrentMonth;
 
@@ -37,7 +81,7 @@ export const useDays = ({ showDefaultDay = true }) => {
         .month(currentMonthFormHeader)
         .year(currentYearFormHeader)
     );
-  };
+  }, []);
 
   const dayClasses =
     "flex items-center justify-center text-center w-8 h-8 mx-auto rounded-full cursor-pointer transition-all";
@@ -45,8 +89,13 @@ export const useDays = ({ showDefaultDay = true }) => {
   const activeClasses = (dayObject: any) => {
     const day = dayObject?.day;
     const isHoliday = dayObject?.isHoliday;
+    const selectedDate = currentDate.date();
     const isCurrentMonth = dayObject?.isCurrentMonth;
-    const selectedDate = currentDate?.calendar(calendarType).date();
+    const selectedYear = Number(currentDate.format("YYYY"));
+    const selectedMonth = Number(currentDate.format("MM")) - 1;
+    const defaultDay = baseDate().calendar(calendarType).date();
+    const defaultYear = baseDate().calendar(calendarType).year();
+    const defaultMonth = baseDate().calendar(calendarType).month();
 
     if (
       isCurrentMonth &&
@@ -74,61 +123,11 @@ export const useDays = ({ showDefaultDay = true }) => {
     return "";
   };
 
-  const checkIsHoliday = (dayNumber: number) => {
-    const targetDateWeekdayname = dayNumber % 7;
-    const holidayWeekdays = locale === "fa" ? [6] : [0, 6];
-    return holidayWeekdays.includes(targetDateWeekdayname);
+  return {
+    days,
+    locale,
+    dayClasses,
+    clickOnDay,
+    activeClasses,
   };
-
-  useEffect(() => {
-    const prevMonthDaysLength = currentDate
-      .month(currentMonthFormHeader - 1)
-      .daysInMonth();
-
-    const startOfCurrentMonth = Number(
-      currentDate.month(currentMonthFormHeader).startOf("month").weekday()
-    );
-
-    const endOfCurrentMonth = Number(
-      currentDate.month(currentMonthFormHeader).endOf("month").weekday()
-    );
-
-    const currentMonthDaysLength = currentDate
-      .month(currentMonthFormHeader)
-      .daysInMonth();
-
-    const nextMonthDaysLength = 6 - Number(endOfCurrentMonth);
-
-    const prevMonthDays = Array.from(
-      { length: startOfCurrentMonth },
-      (_, index) => ({
-        day: prevMonthDaysLength - (startOfCurrentMonth - 1) + index,
-        isCurrentMonth: false,
-      })
-    );
-
-    const currentMonthDays = Array.from(
-      { length: currentMonthDaysLength },
-      (_, index) => ({
-        day: index + 1,
-        isCurrentMonth: true,
-      })
-    );
-
-    const nextMonthDays = Array.from(
-      { length: nextMonthDaysLength },
-      (_, index) => ({ day: index + 1, isCurrentMonth: false })
-    );
-
-    const pureDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
-
-    const days = pureDays.map((item, index) => ({
-      ...item,
-      isHoliday: checkIsHoliday(index),
-    }));
-
-    setDaysInMonth(days);
-  }, [currentMonthFormHeader]);
-
-  return { locale, daysInMonth, dayClasses, activeClasses, handleClickOnDay };
 };

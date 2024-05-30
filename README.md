@@ -8,7 +8,7 @@ Light-weight and minimal design calendar for your React projects.
 
 This package is currently under active development. We welcome contributions and feedback!
 
-- **Latest Version:** `0.9.1-alpha`
+- **Latest Version:** `0.9.2-alpha`
 
 ## Getting Started with Development Version
 
