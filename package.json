@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
     "build": "tsc && vite build",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'"
@@ -38,7 +37,6 @@
   "files": [
     "dist"
   ],
-  "types": "index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/lunar-persian-calendar.es.js",
@@ -46,7 +44,8 @@
     },
     "./dist/style.css": "./dist/style.css"
   },
-  "main": "./dist/lunar-persian-calendar.umd.js",
+  "types": "./dist/App.d.ts",
+  "main": "./dist/lunar-persian-calendar.es.js",
   "module": "./dist/lunar-persian-calendar.es.js",
   "keywords": [
     "calendar",
