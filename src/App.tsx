@@ -7,9 +7,10 @@ import { Months } from "./components/Months";
 import { Header } from "./components/Header";
 import { Actions } from "./components/Actions";
 import { Weekdays } from "./components/Weekdays";
+import { DateProvider } from "./store/DateContext";
 import { useDateContext } from "./store/DateContext";
 
-export const App: React.FC<IApp> = (props: IApp) => {
+const AppInterface: React.FC<IApp> = (props: IApp) => {
   const {
     onChange = () => {},
     onAccept,
@@ -50,5 +51,13 @@ export const App: React.FC<IApp> = (props: IApp) => {
       <MonthsOrYearsOrDaysComponent />
       {withActions && <Actions />}
     </div>
+  );
+};
+
+export const App = (props: any) => {
+  return (
+    <DateProvider>
+      <AppInterface {...props} />
+    </DateProvider>
   );
 };

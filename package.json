@@ -1,6 +1,6 @@
 {
   "name": "lunar-persian-calendar",
-  "version": "0.9.3-alpha",
+  "version": "0.10.0-alpha",
   "type": "module",
   "scripts": {
     "dev": "vite",
