@@ -15,13 +15,13 @@ export const Years = () => {
       className="grid grid-cols-3 gap-x-14 gap-y-11 text-center py-4 overflow-y-auto"
       style={{ direction: "rtl", height: "320px", overflow: "auto" }}
     >
-      {years.map((year, index) => (
+      {years.map((item, index) => (
         <span
           key={index}
           className="cursor-pointer"
-          onClick={() => onYearClick(parseInt(year))}
+          onClick={() => onYearClick(item.key)}
         >
-          {year}
+          {item.year}
         </span>
       ))}
     </div>

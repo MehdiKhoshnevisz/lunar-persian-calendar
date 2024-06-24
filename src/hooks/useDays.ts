@@ -31,7 +31,7 @@ export const useDays = ({ showDefaultDay = true }) => {
   const prevMonthDays = Array.from(
     { length: startOfCurrentMonth },
     (_, index) => ({
-      day: prevMonthDaysLength - (startOfCurrentMonth - 1) + index,
+      key: prevMonthDaysLength - (startOfCurrentMonth - 1) + index,
       isCurrentMonth: false,
     })
   );
@@ -39,7 +39,7 @@ export const useDays = ({ showDefaultDay = true }) => {
   const currentMonthDays = Array.from(
     { length: currentMonthDaysLength },
     (_, index) => ({
-      day: index + 1,
+      key: index + 1,
       isCurrentMonth: true,
     })
   );
@@ -47,7 +47,7 @@ export const useDays = ({ showDefaultDay = true }) => {
   const nextMonthDays = Array.from(
     { length: nextMonthDaysLength },
     (_, index) => ({
-      day: index + 1,
+      key: index + 1,
       isCurrentMonth: false,
     })
   );
@@ -64,13 +64,14 @@ export const useDays = ({ showDefaultDay = true }) => {
     () =>
       allDays.map((item, index) => ({
         ...item,
+        day: item?.key?.toLocaleString(locale),
         isHoliday: checkIsHoliday(index),
       })),
     [allDays]
   );
 
   const clickOnDay = useCallback((dayObject: any) => {
-    const day = dayObject?.day;
+    const day = dayObject?.key;
     const isCurrentMonth = dayObject?.isCurrentMonth;
 
     if (!isCurrentMonth) return;
@@ -87,7 +88,7 @@ export const useDays = ({ showDefaultDay = true }) => {
     "flex items-center justify-center text-center w-8 h-8 mx-auto rounded-full cursor-pointer transition-all";
 
   const activeClasses = (dayObject: any) => {
-    const day = dayObject?.day;
+    const day = dayObject?.key;
     const isHoliday = dayObject?.isHoliday;
     const selectedDate = currentDate.date();
     const isCurrentMonth = dayObject?.isCurrentMonth;
