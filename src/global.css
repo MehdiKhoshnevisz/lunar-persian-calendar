@@ -1,9 +1,9 @@
-@import "./fonts.css";
+@import url("https://fonts.cdnfonts.com/css/iranyekan?styles=101910");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: IranYekan;
+  font-family: "IRANYekan", sans-serif;
 }
