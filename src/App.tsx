@@ -54,10 +54,12 @@ const AppInterface: React.FC<IApp> = (props: IApp) => {
   );
 };
 
-export const App = (props: any) => {
+const App = (props?: any) => {
   return (
     <DateProvider>
       <AppInterface {...props} />
     </DateProvider>
   );
 };
+
+export default App;
