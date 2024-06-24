@@ -1,4 +1,6 @@
 
+
+
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -16,17 +18,10 @@
     "jsx": "react-jsx",
     "declaration": true,
     "skipLibCheck": true,
-     "esModuleInterop": true ,
-     "declarationMap": true,
-    "baseUrl": ".",
-     "paths": {
-      "react-vite-library": [ "src/component/index.ts" ]
-    },
-    "typeRoots": [
-      "node_modules/@types",
-      "src/component/index.d.ts"
-    ]
+    "esModuleInterop": true ,
+    "declarationMap": false,
+    "baseUrl": "./",
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules"],
 }

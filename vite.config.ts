@@ -6,20 +6,14 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig((configEnv) => ({
-  plugins: [
-    react(),
-    dts(),
-    tsConfigPaths(),
-    dts({
-      include: ["src/"],
-    }),
-  ],
+  plugins: [react(), tsConfigPaths()],
   build: {
+    minify: true,
     lib: {
       entry: path.resolve(__dirname, "src/App.tsx"),
-      name: "lunar-persian-calendar",
+      name: "LunarPersianCalendar",
+      fileName: "lunar-persian-calendar",
       formats: ["es", "umd"],
-      fileName: (format) => `lunar-persian-calendar.${format}.js`,
     },
   },
   rollupOptions: {
