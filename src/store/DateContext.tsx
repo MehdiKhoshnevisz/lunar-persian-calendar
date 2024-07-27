@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 import { useDate } from "../hooks/useDate";
-import { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface DateContextType {
   locale: string;
@@ -35,19 +35,19 @@ export const useDateContext = () => {
 
 export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
   const { baseDate } = useDate();
-  const [locale, setLocale] = useState<string>("fa");
+  const [locale, setLocale] = useState("fa");
   const calendarType = locale === "fa" ? "jalali" : "gregory";
   const [showYearList, setShowYearList] = useState(false);
   const [showMonthList, setShowMonthList] = useState(false);
   const date = baseDate().calendar(calendarType).locale(locale);
 
-  const [currentYearFormHeader, setCurrentYearFromHeader] = useState<number>(
+  const [currentDate, setCurrentDate] = useState(date);
+  const [currentYearFormHeader, setCurrentYearFromHeader] = useState(
     date.year()
   );
-  const [currentMonthFormHeader, setCurrentMonthFromHeader] = useState<number>(
+  const [currentMonthFormHeader, setCurrentMonthFromHeader] = useState(
     date.month()
   );
-  const [currentDate, setCurrentDate] = useState<Dayjs>(date);
 
   return (
     <DateContext.Provider

@@ -1,4 +1,4 @@
-import { useDateContext } from "src/store/DateContext";
+import { useDateContext } from "../store/DateContext";
 
 export const Actions = (props: any) => {
   const { onAccept, onCancel } = props;

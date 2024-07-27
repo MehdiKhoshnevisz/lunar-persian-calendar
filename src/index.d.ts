@@ -1,6 +1,7 @@
-export interface IApp {
+import { Dayjs } from "dayjs";
+interface CalendarProps {
   withActions?: boolean;
-  onCancel?: () => viod | undefined;
-  onAccept?: () => viod | undefined;
-  onChange?: (date: Dayjs) => viod | undefined;
+  onCancel?: () => void | undefined;
+  onAccept?: () => void | undefined;
+  onChange?: (date: Dayjs | Date) => void | undefined;
 }

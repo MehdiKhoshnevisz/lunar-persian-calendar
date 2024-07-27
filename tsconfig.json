@@ -1,6 +1,3 @@
-
-
-
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -21,7 +18,7 @@
     "esModuleInterop": true ,
     "declarationMap": false,
     "baseUrl": "./",
+    "outDir": "./dist",
   },
-  "include": ["src"],
   "exclude": ["node_modules"],
 }

@@ -1,3 +1,4 @@
+const packageJSON = require("./package.json");
 import path from "path";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vite";
@@ -6,24 +7,26 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig((configEnv) => ({
-  plugins: [react(), tsConfigPaths()],
+  plugins: [react(), tsConfigPaths(), dts()],
   build: {
     minify: true,
+    cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/App.tsx"),
       name: "LunarPersianCalendar",
       fileName: "lunar-persian-calendar",
       formats: ["es", "umd"],
     },
-  },
-  rollupOptions: {
-    external: ["react", "react-dom"],
-    output: {
-      globals: {
-        react: "React",
-        "react-dom": "ReactDOM",
+    rollupOptions: {
+      external: Object.keys(packageJSON.dependencies),
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
       },
     },
+    sourcemap: true,
   },
   emptyOutDir: true,
 }));
