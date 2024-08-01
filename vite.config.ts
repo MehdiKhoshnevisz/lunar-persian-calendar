@@ -10,7 +10,6 @@ export default defineConfig((configEnv) => ({
   plugins: [react(), tsConfigPaths(), dts()],
   build: {
     minify: true,
-    cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/App.tsx"),
       name: "LunarPersianCalendar",
@@ -18,7 +17,7 @@ export default defineConfig((configEnv) => ({
       formats: ["es", "umd"],
     },
     rollupOptions: {
-      external: Object.keys(packageJSON.dependencies),
+      external: [...Object.keys(packageJSON.dependencies)],
       output: {
         globals: {
           react: "React",
@@ -26,7 +25,6 @@ export default defineConfig((configEnv) => ({
         },
       },
     },
-    sourcemap: true,
   },
   emptyOutDir: true,
 }));

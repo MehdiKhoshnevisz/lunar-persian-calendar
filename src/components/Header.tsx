@@ -2,6 +2,11 @@ import { useYears } from "../hooks/useYears";
 import { useMonth } from "../hooks/useMonth";
 import { useDateContext } from "../store/DateContext";
 
+//@ts-ignore
+import arrowLeft from "../../public/arrow-left.svg";
+//@ts-ignore
+import arrowRight from "../../public/arrow-right.svg";
+
 export const Header = () => {
   const { currentYear } = useYears();
   const { currentMonthName, goToNextMonth, goToPrevMonth } = useMonth();
@@ -19,12 +24,15 @@ export const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center mb-6">
+    <header
+      className="flex justify-between items-center mb-6"
+      style={{ direction: "rtl" }}
+    >
       <img
-        src="/arrow-left.svg"
+        src={arrowRight}
         alt=""
-        className="cursor-pointer  transition-all active:scale-90"
-        onClick={goToPrevMonth}
+        className="cursor-pointer transition-all active:scale-90"
+        onClick={goToNextMonth}
       />
 
       <div>
@@ -38,10 +46,10 @@ export const Header = () => {
       </div>
 
       <img
-        src="/arrow-right.svg"
+        src={arrowLeft}
         alt=""
         className="cursor-pointer transition-all active:scale-90"
-        onClick={goToNextMonth}
+        onClick={goToPrevMonth}
       />
     </header>
   );
